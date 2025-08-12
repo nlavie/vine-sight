@@ -40,7 +40,22 @@ POSTGRES_PORT=5432
 POSTGRES_USER=vinesight
 ```
 
-To run ETL manually:
+To run Server manually:
+
+Run a PostgresSQL instance:
+
+```yaml
+  postgres:
+    image: postgres:13
+    environment:
+      POSTGRES_USER: vinesight
+      POSTGRES_PASSWORD: vinesight
+      POSTGRES_DB: vinesight
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+```
 
 ```bash
 python server/main.py
@@ -48,18 +63,6 @@ python server/main.py
 
 The project is configured to run as a service(wrapped with FastApi) which provide the stats API's
 
-```bash
-
-
-```
-
-Run tests:
-
-```bash
-pytest
-```
-
----
 
 ### 2. Using Docker
 
