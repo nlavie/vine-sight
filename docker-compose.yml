@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:13
+    environment:
+      POSTGRES_USER: vinesight
+      POSTGRES_PASSWORD: vinesight
+      POSTGRES_DB: vinesight
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  server:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    image: server:local
+    depends_on:
+      - postgres
+    ports:
+      - "9090:9090"
+    environment:
+      PORT: 9090
+      POSTGRES_DB: vinesight
+      POSTGRES_HOST: postgres
+      POSTGRES_PASSWORD: vinesight
+      POSTGRES_PORT: 5432
+      POSTGRES_USER: vinesight
+    command: pipenv run python /app/server/main.py
+    networks:
+      - default
+
+volumes:
+  postgres_data:
